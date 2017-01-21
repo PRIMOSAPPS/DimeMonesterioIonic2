@@ -9,8 +9,9 @@ import { ListPage } from '../pages/list/list';
 import { Cabecera } from '../components/cabecera/cabecera';
 import { MiSlider } from '../components/slider/slider';
 
-import { ColaboracionCiudadanaPage }//, DialogoSinDireccion, DialogoConfirmacion, DialogoSlider }
+import { ColaboracionCiudadanaPage, DialogoSlider, DialogoSinDireccion, DialogoConfirmacion }
   from '../pages/colaboracion-ciudadana/colaboracion-ciudadana';
+
 import { ListPuntosInteresPage } from '../pages/list-puntos-interes/list-puntos-interes';
 import { DetalleSitioPage } from '../pages/detalle-sitio/detalle-sitio';
 import { NotificacionesPage } from '../pages/notificaciones/notificaciones';

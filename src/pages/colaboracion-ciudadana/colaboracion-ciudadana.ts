@@ -13,6 +13,10 @@ import { DialogoSlider } from './dialogo-slider';
 import { DialogoConfirmacion } from './dialogo-confirmacion';
 import { DialogoSinDireccion } from './dialogo-sindireccion';
 
+
+
+export {DialogoSlider, DialogoSinDireccion, DialogoConfirmacion}
+
 /*
   Generated class for the ColaboracionCiudadanaPage page.
 
@@ -74,12 +78,14 @@ export class ColaboracionCiudadanaPage implements GpsListener {
 
   sacarFoto() {
 
+    console.log("Vamos a sacar una foto.");
     //var urlFoto = "img/slide00" + (this.fotosRealizadas.length +1) + ".jpg";
     //this.fotosRealizadas.push(urlFoto);
     this.camara.sacarFotoCamera().then(
-      (urlFoto) => {
-        console.log("Sacada foto: " + urlFoto);
-        this.fotosRealizadas.push(urlFoto);
+    //this.camara.sacarFoto().then(
+      (imagen) => {
+        console.log("Sacada foto.");
+        this.fotosRealizadas.push('data:image/jpeg;base64,' + imagen);
       },
       (error) => console.log("Error al sacar la foto: " + error)
     );
@@ -105,7 +111,7 @@ export class ColaboracionCiudadanaPage implements GpsListener {
     });
     */
     console.log("Pulsado: sacarFoto");
-    this.camara.sacarFoto().then();
+    //this.camara.sacarFoto().then();
   }
 
   mostrarSlider(foto) {
@@ -159,13 +165,13 @@ export class ColaboracionCiudadanaPage implements GpsListener {
   }
 
   preguntarDireccion() {
-    //let profileModal = this.modalCtrl.create(DialogoSinDireccion, {colaboracion: this});
-    //profileModal.present();
+    let profileModal = this.modalCtrl.create(DialogoSinDireccion, {colaboracion: this});
+    profileModal.present();
   }
 
   mostrarDialogoConfirmarEnvio() {
-    //let profileModal = this.modalCtrl.create(DialogoConfirmacion, {colaboracion: this});
-    //profileModal.present();
+    let profileModal = this.modalCtrl.create(DialogoConfirmacion, {colaboracion: this});
+    profileModal.present();
   }
 
   confirmarEnvio() {

@@ -49,14 +49,12 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      //{ title: 'Page One', component: Page1 },
-      //{ title: 'Page Two', component: Page2 },
       { title: 'Puntos de interés', component: ListPuntosInteresPage },
-      //{ title: 'Colaboración ciudadana', component: ColaboracionCiudadanaPage },
+      { title: 'Colaboración ciudadana', component: ColaboracionCiudadanaPage },
       { title: 'Radio', component: RadioPage },
       { title: 'Bandos', component: NotificacionesPage },
-      { title: 'HelloIonicPage', component: HelloIonicPage },
-      { title: 'List', component: ListPage },
+      //{ title: 'HelloIonicPage', component: HelloIonicPage },
+      //{ title: 'List', component: ListPage },
     ];
 
   }
@@ -79,9 +77,10 @@ export class MyApp {
           primerArranque
             .then(
             (res) => {
+              console.log("Es el primer arranque: " + res);
               if (res != "false") {
-                console.log("Es el primer arranque: " + res);
-                //this.accionesPrimerArranque();
+                console.log("Si que es el primer arranque: " + res);
+                this.accionesPrimerArranque();
               }
             },
             (err) => { console.log("ERROR LEYENDO LOCALSTORAGE: " + MyApp.PRIMER_ARRANQUE); })
@@ -91,9 +90,50 @@ export class MyApp {
     });
   }
 
+  accionesPrimerArranque() {
+    try {
+      // Se crean las bases de datos.
+      var notifiSqlite = new NotificacionesSqLite(this.platform);
+      notifiSqlite.crearBBDD().then(
+        () => {
+          console.log("Base de datos de NOTIFICACIONES creada correctamente.");
+          var lectorNotificaciones = new LectorNotificaciones(this.http, notifiSqlite);
+          lectorNotificaciones.cargarNotificacionesServidor();
+        },
+        (error) => {
+          console.error("Error: Se ha producidoun error al crear la base de datos de notificaciones: " + error);
+        }
+      );
+
+      var imagenesSqlite = new ImagenesSqLite(this.platform);
+      imagenesSqlite.crearBBDD().then(() => {
+        console.log("Base de datos de IMAGENES creada correctamente.");
+        var sitiosSqlite = new SitiosSqLite(this.platform, imagenesSqlite, this.http);
+        sitiosSqlite.crearBBDD().then(
+          (b) => {
+            //this.showAlert("sitioToBD", "Base de datos creada");
+            console.log("Base de datos de SITIOS creada correctamente.");
+            var lectorSitios = new LectorSitios(this.http, sitiosSqlite, imagenesSqlite);
+            lectorSitios.cargarSitios();
+            //this.showAlert("BIEN", "Se ha creado la base de datos: " + b);
+          },
+          (m) => { console.log("[accionesPrimerArranque] NO Se ha creado la base de datos: " + m); }
+        );
+      }, (error) => {
+        console.log("[accionesPrimerArranque] NO Se ha creado la base de datos: " + error);
+      });
+
+      this.storage.set(MyApp.PRIMER_ARRANQUE, "false");
+    } catch (e) {
+      console.log("Excepcion capturada.");
+    }
+
+  }
+
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
+    // close the menu when clicking a link from the menu
+    this.menu.close();
+    // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }
 }

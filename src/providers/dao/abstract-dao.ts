@@ -21,8 +21,10 @@ export abstract class AbstractDao<T> implements IDao<T> {
   abstract toBdAdd(T): Array<any>;
 
   crearBBDD(): Promise<any> {
+    console.log("SE VA A INTENTAR CREAR LA BASE DE DATOS: " + this.tableName());
     var resul = new Promise((resolve, reject) => {
       this.abrir().then(() => {
+        console.log("Base de datos abierta correctamente: " + this.tableName());
         this.executeSql(this.createTable(), [] ).then(
           () => {
               this.cerrar().then(() => {resolve(true);});
@@ -39,6 +41,7 @@ export abstract class AbstractDao<T> implements IDao<T> {
         console.error("Unable to open database", error);
         this.cerrar().then(() => {reject(error);});
       }).catch((reason) => {
+        console.error("Unable to create database", reason);
         this.cerrar().then(() => {reject(reason);});
       });
     });

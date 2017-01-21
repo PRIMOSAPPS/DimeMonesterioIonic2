@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Camera } from 'ionic-native';
+import { Camera, CameraOptions } from 'ionic-native';
 
 import { MediaCapture, CaptureImageOptions, MediaFile, CaptureError } from 'ionic-native';
 
@@ -16,6 +16,10 @@ export class Camara {
   }
 
   sacarFoto(): Promise<MediaFile[] | CaptureError> {
+    console.log("[sacarFoto] Inicio de sacar foto.");
+    //let options: CameraOptions = { destinationType: Camera.DestinationType.DATA_URL,
+    //  mediaType: Camera.MediaType.PICTURE, saveToPhotoAlbum: false};
+    //return Camera.getPicture(options);
     let options: CaptureImageOptions = { limit: 3 };
     return MediaCapture.captureImage(options);
     /*
@@ -36,7 +40,11 @@ export class Camara {
   }
 
     sacarFotoCamera(): Promise<any> {
-      return Camera.getPicture(this.opciones);
+      console.log("[sacarFotoCamera] Inicio de sacar foto.");
+      let options: CameraOptions = { destinationType: Camera.DestinationType.DATA_URL,
+        mediaType: Camera.MediaType.PICTURE, saveToPhotoAlbum: false};
+      return Camera.getPicture(options);
+      //return Camera.getPicture(this.opciones);
       /*
       .then((imageData) => {
         // imageData is either a base64 encoded string or a file URI

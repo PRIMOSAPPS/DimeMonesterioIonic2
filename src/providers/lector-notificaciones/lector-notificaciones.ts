@@ -40,7 +40,7 @@ export class LectorNotificaciones {
             .map(res => res.json()).
             subscribe(data => this.tratarNotificacion(data),
                   err => this.handleError(err),
-                  () => console.log('Consutla terminada.'));
+                  () => console.log('Consulta terminada.'));
     });
   }
 
