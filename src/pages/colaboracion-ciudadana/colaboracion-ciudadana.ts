@@ -9,6 +9,10 @@ import { ImagenMailDto } from '../../providers/mail-sender/imagenmail-dto';
 import { ModalController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { File } from 'ionic-native';
 
+import { DialogoSlider } from './dialogo-slider';
+import { DialogoConfirmacion } from './dialogo-confirmacion';
+import { DialogoSinDireccion } from './dialogo-sindireccion';
+
 /*
   Generated class for the ColaboracionCiudadanaPage page.
 
@@ -155,13 +159,13 @@ export class ColaboracionCiudadanaPage implements GpsListener {
   }
 
   preguntarDireccion() {
-    let profileModal = this.modalCtrl.create(DialogoSinDireccion, {colaboracion: this});
-    profileModal.present();
+    //let profileModal = this.modalCtrl.create(DialogoSinDireccion, {colaboracion: this});
+    //profileModal.present();
   }
 
   mostrarDialogoConfirmarEnvio() {
-    let profileModal = this.modalCtrl.create(DialogoConfirmacion, {colaboracion: this});
-    profileModal.present();
+    //let profileModal = this.modalCtrl.create(DialogoConfirmacion, {colaboracion: this});
+    //profileModal.present();
   }
 
   confirmarEnvio() {
@@ -239,101 +243,4 @@ export class ColaboracionCiudadanaPage implements GpsListener {
     console.log("Asignando la direccion: " + direccion);
     this.direccion = direccion;
   }
-}
-
-/**
-  Dialogo para preguntar la direccion sino se ha conseguido
-*/
-@Component({
-  templateUrl: 'dialogo-sin-direccion.html',
-})
-export class DialogoSinDireccion {
-
-  colaboracion: ColaboracionCiudadanaPage;
-  direccion: string;
-
-  constructor(params: NavParams, public viewCtrl: ViewController) {
-    this.direccion = "Prueba";
-    this.colaboracion = params.get("colaboracion");
-  }
-
-  aceptar() {
-    console.log("Se ha aceptado la direccion: " + this.direccion);
-    this.cerrar();
-    this.colaboracion.setDireccion(this.direccion);
-    this.colaboracion.mostrarDialogoConfirmarEnvio();
-  }
-
-  cerrar() {
-    console.log("Se cierra el dialogo para pedir la direccion.");
-    this.viewCtrl.dismiss();
-  }
-
-}
-
-/**
-  Dialogo de confirmacion
-*/
-@Component({
-  templateUrl: 'dialogo-confirmacion.html',
-})
-export class DialogoConfirmacion {
-
-  colaboracion: ColaboracionCiudadanaPage;
-
-  direccion: string;
-  telefono: string;
-  correo: string;
-
-  constructor(params: NavParams, public viewCtrl: ViewController) {
-    this.colaboracion = params.get("colaboracion");
-    this.direccion = this.colaboracion.getDireccion();
-    this.telefono = this.colaboracion.getTelefono();
-    this.correo = this.colaboracion.getCorreo();
-    console.log("[DialogoConfirmacion] direccion: " + this.direccion);
-    console.log("[DialogoConfirmacion] telefono: " + this.telefono);
-    console.log("[DialogoConfirmacion] correo: " + this.correo);
-  }
-
-  aceptar() {
-    this.cerrar();
-    this.colaboracion.confirmarEnvio();
-  }
-
-  cerrar() {
-    this.viewCtrl.dismiss();
-  }
-
-}
-
-/**
-Dialogo modal para ampliar las fotos realizadas
-*/
-@Component({
-  templateUrl: 'dialogo-slider.html',
-})
-export class DialogoSlider {
-
-  myOptions = {
-    //effect: 'fade',
-    //autoplay: 500,
-    //autoplayDisableOnInteraction: false,
-    loop: false,
-    //speed: 500,
-    pager: true
-  };
-
-  claseSlider: string;
-
-  imagenesSlider: Array<string>;
-
-  constructor(params: NavParams, public viewCtrl: ViewController) {
-    this.imagenesSlider = params.get("imagenes");
-    this.claseSlider = "fondoSlider";
-  }
-
-  cerrar() {
-    this.viewCtrl.dismiss();
-  }
-
 }
