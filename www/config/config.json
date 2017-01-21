@@ -1,0 +1,19 @@
+{
+  "idPoblacion":1,
+  "nombreAplicacion": "DimeMonesterio",
+  "servidor": "http://jamondemonesterio.org",
+  "__servidor": "http://192.168.1.104",
+  "rutaNotificacionesApp": "/dime/app/NotificacionesToApp.php",
+  "rutaNotificacionesActualizablesApp": "/dime/app/NotificacionesDescargablesToApp.php",
+  "correoAplicacion": "primosapps@roymainformatica.com",
+  "urlRadio": "http://emisoras.dip-badajoz.es:8040/;",
+  "latitudPueblo": 38.0891002,
+  "longitudPueblo": -6.2819273,
+  "urlEnvioCorreo": "http://192.168.1.104/dime/buzonciudadano/RecepcionAvisoCiudadano.php",
+
+
+
+  "rutaCategoriasXML": "/eventos/app/categorias/CategoriasToXML.php",
+  "rutaSitiosXML": "/eventos/app/sitios/SitiosToXML.php",
+  "rutaEventosXML": "/eventos/app/eventos/EventosToXML.php"
+}
