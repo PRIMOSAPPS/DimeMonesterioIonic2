@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Preferencias</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="preferencias">
+  <ion-item class="textoPreferencia" text-wrap>
+    <ion-label titulo>Vibrar</ion-label>
+    <ion-label subtitulo>Activar para vibrar al recibir una notificación</ion-label>
+    <ion-checkbox color="dark" [(ngModel)]="vibrar"></ion-checkbox>
+  </ion-item>
+
+  <ion-item class="textoPreferencia" text-wrap>
+    <ion-label titulo>Sonar</ion-label>
+    <ion-label subtitulo>Activa para emitir sonido al recibir una notificación</ion-label>
+    <ion-checkbox color="dark" [(ngModel)]="sonar"></ion-checkbox>
+  </ion-item>
+
+  <ion-item class="textoPreferencia" text-wrap>
+    <ion-label titulo>Led</ion-label>
+    <ion-label subtitulo>Activa la luz del led al recibir una notificación</ion-label>
+    <ion-checkbox color="dark" [(ngModel)]="led"></ion-checkbox>
+  </ion-item>
+</ion-content>

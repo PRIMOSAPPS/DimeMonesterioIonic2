@@ -1,0 +1,75 @@
+<!--
+Generated template for the ColaboracionCiudadanaPage page.
+
+See http://ionicframework.com/docs/v2/components/#navigation for more info on
+Ionic pages and navigation.
+-->
+<ion-header>
+  <mn-cabecera></mn-cabecera>
+</ion-header>
+
+<ion-content class="colaboracion-ciudadana">
+  <ion-item class="direccion-calculada">
+    <ion-label>{{direccion}}</ion-label>
+  </ion-item>
+
+
+  <div class="opciones" [ngClass]="{opciones_sin_fotos: fotosRealizadas.length == 0, opciones_con_fotos: fotosRealizadas.length > 0}">
+    <ion-list radio-group [(ngModel)]="seleccionColaboracion">
+      <ion-item>
+        <ion-label>{{opcionAlumbrado}}</ion-label>
+        <ion-radio value="{{opcionAlumbrado}}"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>{{opcionRecogidaResiduos}}</ion-label>
+        <ion-radio value="{{opcionRecogidaResiduos}}"></ion-radio>
+      </ion-item>
+
+      <div [hidden]="seleccionColaboracion != opcionRecogidaResiduos" class="opciones-secundarias">
+        <ion-list radio-group [(ngModel)]="seleccionResiduos">
+          <ion-item *ngFor="let opcionResiduos of opcionesResiduos">
+            <ion-label>{{opcionResiduos}}</ion-label>
+            <ion-radio [value]="opcionResiduos"></ion-radio>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <ion-item *ngFor="let opcionPrincipal of opcionesPrincipales">
+        <ion-label>{{opcionPrincipal}}</ion-label>
+        <ion-radio [value]="opcionPrincipal"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ion-item class="comentario_colaboracion" [ngClass]="{comentario_colaboracion_sin_fotos: fotosRealizadas.length == 0, comentario_colaboracion_con_fotos: fotosRealizadas.length > 0}">
+    <ion-textarea placeholder="Escribe un comentario"  [(ngModel)]="comentario"></ion-textarea>
+  </ion-item>
+
+  <ion-grid class="miniaturas" [hidden]="this.fotosRealizadas.length == 0">
+    <ion-row>
+      <ion-col width-33 *ngFor="let foto of fotosRealizadas">
+        <div>
+          <ion-card (click)="mostrarSlider(foto)">
+            <img src="{{foto}}"/>
+          </ion-card>
+          <ion-icon name="trash" (click)="borrarFoto(foto)" color="danger"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+<!--
+  <img src="img/iconospuntosinteres/puntos_de_interes.png">
+-->
+  <ion-grid class="controles-inferior">
+    <ion-row>
+      <ion-col width-50 class="sacar-foto" (click)="sacarFoto()">
+        <img src="img/iconoscolaboracion/colaboracion_ciudadana_foto.png">
+      </ion-col>
+      <ion-col width-50 class="enviar" (click)="enviar()">
+        <img src="img/iconoscolaboracion/colaboracion_ciudadana_enviar.png">
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>

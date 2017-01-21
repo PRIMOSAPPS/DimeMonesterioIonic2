@@ -1,0 +1,52 @@
+.getting-started {
+
+  .fondoCompleto {
+    width: 100%;
+    height: 100%;
+  }
+
+  .fondoCompleto div.slide-zoom, .fondoCompleto div.slide-zoom img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /** ***************************************** */
+  p {
+    margin: 20px 0;
+    line-height: 22px;
+    font-size: 16px;
+  }
+
+  .fondoFotos {
+  	width: 100%;
+  	height: 100%;
+  	background-color: #0000FF;
+  }
+
+  blue {
+  	background-color: #0000FF;
+  }
+
+}
+
+
+.fondo {
+  background-image:url("../../img/slide001.jpg");
+  background-size: 100% 100%;
+  /*
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  */
+}
+
+
+.fondo2 {
+  background-image:url("../../img/slide002.jpg");
+  background-size: 100% 100%;
+  /*
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  */
+}

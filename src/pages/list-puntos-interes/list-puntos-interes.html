@@ -1,0 +1,18 @@
+<ion-header>
+  <mn-cabecera></mn-cabecera>
+</ion-header>
+
+<ion-content class="list-puntos-interes">
+  <ion-list>
+    <ion-item *ngFor="let item of puntoInteres" (click)="sitioSeleccionado($event, item)" text-wrap>
+      <div id="wrapper">
+          <div id="im">
+            <img src="img/iconospuntosinteres/puntos_de_interes.png">
+          </div>
+          <div class="texto">
+            {{item.nombre}}
+          </div>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

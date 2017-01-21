@@ -1,0 +1,39 @@
+<!--
+  Generated template for the Slider component.
+
+  See https://angular.io/docs/ts/latest/api/core/ComponentMetadata-class.html
+  for more info on Angular 2 Components.
+
+  http://blog.appweplay.com/2016/01/creating-custom-components-in-ionic2.html
+  http://blog.appweplay.com/2016/02/ionic2angular2-passing-input-data-to.html
+-->
+
+<ion-slides [options]="sliderOptions" class="{{clase}}">
+  <ion-slide *ngFor="let imagen of imagenes">
+    <img src="{{imagen}}" class="fondoFotos"/>
+  </ion-slide>
+
+  <!--
+  <ion-slide>
+    <img src="img/slide001.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide002.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide003.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide004.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide005.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide006.jpg" class="fondoFotos"/>
+  </ion-slide>
+  <ion-slide>
+    <img src="img/slide007.jpg" class="fondoFotos"/>
+  </ion-slide>
+  -->
+</ion-slides>

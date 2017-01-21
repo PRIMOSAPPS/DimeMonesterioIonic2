@@ -1,0 +1,39 @@
+<ion-header>
+  <mn-cabecera></mn-cabecera>
+</ion-header>
+
+<ion-content class="radio">
+  <mi-slider [sliderOptions]="myOptions" [clase]="claseSlider" [imagenes]="imagenesSlider"></mi-slider>
+
+  <ion-item class="radio-mensaje-error" text-wrap
+    [ngClass]="{errorReproduccion: errorReproduccion, reproduccionCorrecta: !errorReproduccion}">
+    <ion-label>{{mensajeErrorReproduccion}}</ion-label>
+  </ion-item>
+
+  <ion-grid class="radio-controles">
+    <ion-row>
+      <ion-col width-33 class="menos-volumen" (click)="menosVolumen()">
+        <img src="img/iconradio/radio_monesterio_volumen_menos.png">
+      </ion-col>
+      <ion-col width-33
+        [ngClass]="{play: !reproduciendo, pause: reproduciendo}"
+        (click)="playPause()">
+      </ion-col>
+      <ion-col width-33 class="mas-volumen" (click)="masVolumen()">
+        <img src="img/iconradio/radio_monesterio_volumen_mas.png">
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <!--
+  <audio controls src="http://shoutcast.internet-radio.org.uk:10272/;"></audio>
+-->
+<!--
+  <audio controls src="http://emisoras.dip-badajoz.es:8040/;"></audio>
+  <audio controls>
+    <source src="http://emisoras.dip-badajoz.es:8040/wcpe.mp3" type="audio/mpeg">
+    <source src="http://emisoras.dip-badajoz.es:8040/wcpe.ogg" type="audio/ogg">
+  </audio>
+-->
+</ion-content>

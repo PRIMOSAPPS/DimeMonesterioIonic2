@@ -1,0 +1,28 @@
+<div class="dialogo-sin-direccion">
+  <ion-header>
+    <ion-navbar>
+      <ion-title>Sin dirección</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content class="contenido-sin-direccion">
+    <ion-item text-wrap class="descripcion-dialogo">
+      <ion-label>No se ha podido calcular la localización. Por favor, escriba la dirección</ion-label>
+    </ion-item>
+    <ion-item class="direccion-usuario">
+      <ion-textarea placeholder="Dirección" [(ngModel)]="direccion"></ion-textarea>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col width-50>
+          <button ion-button color="dark" clear (click)="cerrar()">Cancelar</button>
+        </ion-col>
+        <ion-col width-50>
+          <button ion-button color="dark" clear (click)="aceptar()">Aceptar</button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</div>

@@ -1,0 +1,321 @@
+.colaboracion-ciudadana {
+  $colorPlaceholder: black;
+  $colorPlaceholderFocus: #FFFFFF;
+  $altoDireccionCalculada: 10%;
+  $altoComentarioColaboracion: 20%;
+  $altoControlesInferiores: 10%;
+  $altoMiniaturas: 20%;
+
+  $altoOpcionesSinFotos: 100% - $altoComentarioColaboracion - $altoDireccionCalculada - $altoControlesInferiores;
+  $altoOpcionesConFotos: $altoOpcionesSinFotos - $altoMiniaturas;
+
+  height: 100%;
+
+  .direccion-calculada {
+    margin: 8px 8px 8px 0;
+    color: #616161;
+    background-color: #f5ebc4;
+    height: $altoDireccionCalculada;
+  }
+
+  .comentario_colaboracion {
+    background-color: #d9a94c;
+    position: absolute;
+    height: $altoComentarioColaboracion;
+  }
+
+  .comentario_colaboracion_con_fotos {
+    bottom: $altoControlesInferiores + $altoMiniaturas;
+  }
+
+  .comentario_colaboracion_sin_fotos {
+    bottom: $altoControlesInferiores;
+  }
+
+  .comentario_colaboracion textarea {
+    margin: 0;
+  }
+
+  .opciones-secundarias {
+    margin-left: 5%;
+  }
+
+  .opciones-secundarias ion-item {
+    background-color: #f5ebc4;
+  }
+
+  .opciones {
+    overflow-y: scroll;
+  }
+
+  .opciones_con_fotos {
+    height: $altoOpcionesConFotos;
+  }
+
+  .opciones_sin_fotos {
+    height: $altoOpcionesSinFotos;
+  }
+
+  .controles-inferior {
+    background-color: #000000;
+    position: absolute;
+    height: $altoControlesInferiores;
+    bottom: 0;
+    padding: 0px;
+  }
+  .controles-inferior ion-row, .controles-inferior ion-col {
+    height: 100%;
+  }
+
+  .controles-inferior ion-col {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .controles-inferior img {
+    height: 100%;
+  }
+
+  .sacar-foto img {
+    margin-left: 0;
+    margin-right: auto;
+    display: block;
+  }
+
+  .enviar img {
+    margin-left: auto;
+    margin-right: 0;
+    display: block;
+  }
+
+  .miniaturas {
+    height: $altoMiniaturas;
+    bottom: $altoControlesInferiores;
+    position: absolute;
+    background-color: #FFFFFF;
+  }
+
+  .miniaturas ion-row {
+    height: 100%;
+  }
+
+  .miniaturas div {
+    height: $altoMiniaturas;
+  }
+
+  .miniaturas img {
+    height: 100%;
+  }
+
+  .miniaturas ion-icon {
+    position: absolute;
+    top: 5%;
+    height: 30%;
+    width: 20%;
+    font-size: 200%;
+  }
+
+  /******************************** */
+  ::-webkit-input-placeholder {
+    color: $colorPlaceholder !important;
+  }
+
+  *::-moz-placeholder {
+    color: $colorPlaceholder !important;
+  }
+
+  *:focus::-moz-placeholder {
+    color: $colorPlaceholderFocus !important;
+  }
+
+  *::-ms-input-placeholder {
+    /* IE10+ */ color: $colorPlaceholder !important;
+  }
+
+  *:focus::-ms-input-placeholder {
+    /* IE10+ */ color: $colorPlaceholderFocus !important;
+  }
+
+  input::-webkit-input-placeholder {
+    color: $colorPlaceholder;
+  }
+
+  input:focus::-webkit-input-placeholder {
+    color: $colorPlaceholderFocus;
+  }
+  /* Firefox < 19 */
+  input:-moz-placeholder {
+    color: $colorPlaceholder;
+  }
+
+  input:focus:-moz-placeholder {
+    color: $colorPlaceholderFocus;
+  }
+  /* Firefox > 19 */
+  input::-moz-placeholder {
+    color: $colorPlaceholder;
+  }
+
+  input:focus::-moz-placeholder {
+    color: $colorPlaceholderFocus;
+  }
+  /* Internet Explorer 10 */
+  input:-ms-input-placeholder {
+    color: $colorPlaceholder;
+  }
+
+  input:focus:-ms-input-placeholder {
+    color: $colorPlaceholderFocus;
+  }
+}
+
+/**
+Estilos para el dialogo modal
+*/
+$anchoVisible: 80%;
+$altoVisible: 60%;
+$marginAncho: (100% - $anchoVisible) / 2;
+$marginAlto: (100% - $altoVisible) / 2;
+$color1: rgb(37, 67, 194);
+$fondoDialogos: rgba(196, 174, 23, 0.64);
+$transparente: rgba(196, 174, 23, 0.0);
+
+.dialogo-sin-direccion, .dialogo-confirmacion {
+  $anchoDialogo: 100%;
+  $altoDialogo: 100%;
+
+  $anchoCabecera: 80%;
+  $altoCabecera: 60%;
+  $leftCabecera: (100% - $anchoCabecera) / 2;
+  padding-left: $marginAncho;
+  padding-right: $marginAncho;
+  padding-top: $marginAlto;
+  padding-bottom: $marginAlto;
+
+  background-color: $fondoDialogos;
+
+  width: $anchoDialogo;
+  height: $altoDialogo;
+
+  .direccion-usuario {
+    height: cover;
+  }
+
+  .swiper-wrapper {
+    background-color: $transparente;
+  }
+
+  ion-header {
+    width: $anchoCabecera;
+    left: $leftCabecera;
+    top: $marginAlto / 2;
+    right: inherit;
+  }
+  ion-header .toolbar-title-md {
+    color: $color1;
+    font-weight: bold;
+  }
+
+  ion-content ion-grid {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+.contenido-sin-direccion, .contenido-confirmacion {
+
+  .descripcion-dialogo {
+    color: $color1;
+  }
+
+  .etiqueta {
+    font-weight: bold;
+    font-size: 80%;
+    width: 40%;
+    /*
+    background-color: #FF8800;
+    */
+  }
+
+  .dato {
+    font-size: 80%;
+  }
+
+}
+
+
+$anchoVisibleSlider: 95%;
+$altoVisibleSlider: 95%;
+$marginAnchoSlider: (100% - $anchoVisibleSlider) / 2;
+$marginAltoSlider: (100% - $altoVisibleSlider) / 2;
+$anchoDialogoSlider: 100%;
+$altoDialogoSlider: 100%;
+.dialogo-slider {
+
+  padding-left: $marginAnchoSlider;
+  padding-right: $marginAnchoSlider;
+  padding-top: $marginAltoSlider;
+  padding-bottom: $marginAltoSlider;
+
+  background-color: $fondoDialogos;
+
+  width: $anchoDialogoSlider;
+  height: $altoDialogoSlider;
+
+  ion-slide {
+    background-color: $fondoDialogos;
+  }
+
+  /*
+  ion-header {
+    width: $anchoCabecera;
+    left: $leftCabecera;
+    top: $marginAlto / 2;
+    right: inherit;
+  }
+  ion-header .toolbar-title-md {
+    color: $color1;
+    font-weight: bold;
+  }
+  */
+
+}
+
+
+.dialogo-slider, .contenido-sin-direccion {
+
+  .descripcion-dialogo {
+    color: $color1;
+  }
+
+  .etiqueta {
+    font-weight: bold;
+    font-size: 80%;
+    width: 40%;
+    /*
+    background-color: #FF8800;
+    */
+  }
+
+  .dato {
+    font-size: 80%;
+  }
+
+  .botonCerrar {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    z-index: 11;
+  }
+
+  .fondoCompleto {
+    width: 100%;
+    height: 100%;
+  }
+
+  .fondoCompleto div.slide-zoom, .fondoCompleto div.slide-zoom img {
+    width: 100%;
+    height: 100%;
+  }
+
+}

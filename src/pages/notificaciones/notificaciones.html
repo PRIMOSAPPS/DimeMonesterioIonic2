@@ -1,0 +1,15 @@
+<ion-header>
+  <mn-cabecera></mn-cabecera>
+</ion-header>
+
+<ion-content class="page-notificaciones">
+  <ion-list>
+    <ion-item *ngFor="let item of notificaciones" (click)="notificacionSeleccionada($event, item)" text-wrap>
+      <div id="wrapper">
+          <div class="titulo">
+            {{item.titulo}}
+          </div>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

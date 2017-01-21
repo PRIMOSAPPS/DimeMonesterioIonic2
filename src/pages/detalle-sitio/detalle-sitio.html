@@ -1,0 +1,67 @@
+<ion-header>
+  <mn-cabecera></mn-cabecera>
+</ion-header>
+
+<ion-content class="detalle-sitio">
+
+  <ion-label class="nombre-sitio" text-wrap>{{sitio.nombre}}</ion-label>
+
+  <ion-slides [options]="opcionesSlider" class="fondo-slide">
+    <ion-slide *ngFor="let imagen of imagenes">
+      <img src="data:image/jpeg;base64,{{imagen}}" />
+    </ion-slide>
+  </ion-slides>
+
+  <ion-label class="nombre-sitio">{{sitio.direccion}} - {{sitio.poblacion}}</ion-label>
+  <ion-label class="nombre-sitio">{{telefonos}}</ion-label>
+  <ion-row wrap responsive-md>
+    <ion-col class="iconos-sitio">
+      <button>
+        <div [hidden]="telefonos.length == 0">
+          <a href="tel:{{telefonoLlamada}}">
+            <img src="img/iconospuntosinteres/puntos_interes_telefono.png">
+          </a>
+      </div>
+      </button>
+      <button>
+        <a href="{{urlCompartir}}">
+          <img src="img/iconospuntosinteres/puntos_de_interes_localizar.png">
+        </a>
+      </button>
+      <button>
+          <img src="img/iconospuntosinteres/puntos_interes_compartir.png" (click)="abrirMapa()">
+      </button>
+      <button>
+        <div [hidden]="sitio.email.length == 0">
+          <a href="{{urlMail}}">
+            <img src="img/iconospuntosinteres/puntos_interes_email.png">
+          </a>
+        </div>
+      </button>
+      <button>
+        <div [hidden]="sitio.web.length == 0">
+          <a href="{{sitio.web}}">
+            <img src="img/iconospuntosinteres/puntos_interes_web.png">
+          </a>
+        </div>
+      </button>
+      <button>
+        <div [hidden]="sitio.facebook.length == 0">
+          <a href="{{sitio.facebook}}">
+            <img src="img/iconospuntosinteres/puntos_interes_facebook.png">
+          </a>
+        </div>
+      </button>
+      <button>
+        <div [hidden]="sitio.twitter.length == 0">
+          <a href="{{sitio.twitter}}">
+            <img src="img/iconospuntosinteres/puntos_interes_twitter.png">
+          </a>
+        </div>
+      </button>
+    </ion-col>
+  </ion-row>
+
+  <div class="informacion-sitio" [innerHTML]="textoLargo"></div>
+
+</ion-content>

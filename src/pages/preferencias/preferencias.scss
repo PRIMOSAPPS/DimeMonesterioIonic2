@@ -1,0 +1,35 @@
+.preferencias {
+  .textoPreferencia {
+    /*
+    width: 80%;
+    height: 33%;
+    */
+  }
+
+  .textoPreferencia .item-inner {
+    flex-direction: column;
+    margin-top: 13px;
+    margin-bottom: 13px;
+  }
+
+  .textoPreferencia .input-wrapper {
+    align-items: left;
+  }
+
+  .textoPreferencia ion-checkbox {
+    margin-right: 5%;
+  }
+
+  .textoPreferencia ion-label {
+    margin: 0;
+  }
+
+  .textoPreferencia [titulo] {
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .textoPreferencia [subtitulo] {
+    font-size: 12px;
+  }
+}

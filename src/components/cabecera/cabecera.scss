@@ -1,0 +1,22 @@
+
+.cabecera-app {
+  $fondoCabecera: #000000;
+  $widthTituloNavBar: 79%;
+
+  background-color: $fondoCabecera;
+
+  ion-icon {
+    font-size: 2em;
+  }
+
+  .toolbar-background {
+    background-color: $fondoCabecera;
+  }
+
+  .tituloNavBar {
+    background-color: #000000;
+    font-weight: bold;
+    width: $widthTituloNavBar;
+  }
+
+}

@@ -1,0 +1,14 @@
+<div class="dialogo-slider">
+  <ion-content class="contenido-sin-direccion">
+    <!--
+    <button ion-button icon-only>
+      <ion-icon name="home">Cerrar</ion-icon>
+    </button>
+    -->
+    <button ion-button color="danger" class="botonCerrar" (click)="cerrar()" icon-only round>
+      <ion-icon name="close"></ion-icon>
+    </button>
+
+    <mi-slider [sliderOptions]="myOptions" [clase]="claseSlider" [imagenes]="imagenesSlider"></mi-slider>
+  </ion-content>
+</div>

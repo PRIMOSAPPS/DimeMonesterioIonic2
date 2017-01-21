@@ -1,0 +1,45 @@
+.detalle-sitio {
+  background-color: #000000;
+  color: #FFFFFF;
+
+  .nombre-sitio {
+    color: #FFFFFF;
+    margin: 0;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    font-size: 100%;
+    font-weight: bold;
+    padding-left: 5%;
+  }
+
+  .fondo-slide {
+    width: 100%;
+    height: auto;
+    /*
+    display: flex;
+    flex-direction: row;
+    */
+  }
+
+  .iconos-sitio button {
+    width: 18%;
+  }
+
+  .iconos-sitio button, .iconos-sitio button a {
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    background-color: #000000;
+  }
+
+  .iconos-sitio button:hover, .iconos-sitio button a:hover {
+    background-color: #000000;
+  }
+
+  .informacion-sitio {
+    color: #000000;
+    background-color: #FFFFFF;
+    padding: 3%;
+  }
+
+}

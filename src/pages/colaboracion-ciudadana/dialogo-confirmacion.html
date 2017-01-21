@@ -1,0 +1,37 @@
+<div class="dialogo-confirmacion">
+  <ion-header>
+    <ion-navbar>
+      <ion-title>Confirmación</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content class="contenido-confirmacion">
+    <ion-item text-wrap class="descripcion-dialogo">
+      <ion-label>Se enviará un correo con la siguiente información al buzón del ciudadano.</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label class="etiqueta">Teléfono</ion-label>
+      <ion-label class="dato">{{telefono}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label class="etiqueta">Correo</ion-label>
+      <ion-label class="dato">{{correo}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label class="etiqueta">Dirección</ion-label>
+      <ion-label class="dato">{{direccion}}</ion-label>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col width-50>
+          <button ion-button color="dark" clear (click)="cerrar()">Cancelar</button>
+        </ion-col>
+        <ion-col width-50>
+          <button ion-button color="dark" clear (click)="aceptar()">Aceptar</button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</div>

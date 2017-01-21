@@ -1,0 +1,198 @@
+import { Injectable } from '@angular/core';
+
+import {Platform} from 'ionic-angular';
+
+import {SQLite} from 'ionic-native';
+
+import { Notificacion } from '../../../dto/notificacion/notificacion';
+
+import {Base64} from '../../base-64';
+
+import { AlertController } from 'ionic-angular';
+
+import { AbstractDao } from '../abstract-dao';
+
+/*
+  Generated class for the SitiosSqLite provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
+*/
+@Injectable()
+export class NotificacionesSqLite extends AbstractDao<Notificacion> {
+
+  private static get TABLE_NAME(): string { return 'notificaciones'; }
+
+  private static get CREATE_TABLE(): string {
+    return "CREATE TABLE IF NOT EXISTS " + NotificacionesSqLite.TABLE_NAME +
+      " (id INTEGER PRIMARY KEY, id_categoria INTEGER, titulo TEXT, texto TEXT, " +
+      //"fecha_inicio_validez string, fecha_fin_validez string, ultima_actualizacion string )";
+      "fecha_inicio_validez NUMERIC, fecha_fin_validez NUMERIC, ultima_actualizacion NUMERIC )";
+  }
+
+  private static get ALL_COLUMNS(): string {return "id, id_categoria, titulo, texto, " +
+    "fecha_inicio_validez, fecha_fin_validez, ultima_actualizacion";}
+
+  private static get ADD(): string {
+    return "INSERT INTO " + NotificacionesSqLite.TABLE_NAME +
+      " ( " + NotificacionesSqLite.ALL_COLUMNS + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+  }
+
+  private static get GET_ALL(): string {
+    return "SELECT " + NotificacionesSqLite.ALL_COLUMNS + " from " + NotificacionesSqLite.TABLE_NAME;
+  }
+
+  public tableName(): string {return NotificacionesSqLite.TABLE_NAME;}
+  public createTable(): string {return NotificacionesSqLite.CREATE_TABLE;}
+  public allColumns(): string {return NotificacionesSqLite.ALL_COLUMNS;}
+  public addQuery(): string {return NotificacionesSqLite.ADD;}
+  public getAllQuery(): string {return NotificacionesSqLite.GET_ALL;}
+
+  private db: SQLite;
+
+  ////////////////////////////////////////////////
+  constructor(private platform: Platform, private alertCtrl: AlertController) {
+    super();
+    this.db = new SQLite();
+  }
+
+  private showAlert(texto1: string, texto2: string) {
+    let alert = this.alertCtrl.create({
+      title: texto1,
+      subTitle: texto2,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  /*
+  crearBBDD() {
+    this.abrir().then(() => {
+      this.executeSql(NotificacionesSqLite.CREATE_TABLE, [] );
+      this.cerrar();
+    }, (error) => {
+      console.error("Unable to open database", error);
+      this.cerrar();
+    });
+  }
+
+  private abrir(): Promise<any> {
+    return this.db.openDatabase({
+      name: NotificacionesSqLite.TABLE_NAME + ".db",
+      location: "default"
+    });
+  }
+
+  private cerrar(): Promise<any> {
+    return this.db.close();
+  }
+
+  private executeSql(sentencia: string, parametros: any): Promise<any> {
+    return this.db.executeSql(sentencia, parametros);
+  }
+
+  add(notificacion: Notificacion) {
+    this.abrir().then(() => {
+      var parametros = this.toBD(notificacion);
+      this.executeSql(NotificacionesSqLite.ADD, parametros);
+      this.cerrar();
+    }, (error) => {
+      console.error("Unable to open database", error);
+      this.cerrar();
+    });
+  }
+  */
+
+  public getAll(): Array<any> {
+    var arrStr = new Array<Notificacion>();
+    this.cargarNotificaciones(arrStr);
+    return arrStr;
+  }
+
+
+  private notifDesc: Array<any>;
+  private notificaciones: Array<any>;
+
+  private cargarNotificaciones(notificaciones: Array<Notificacion>) {
+    this.abrir().then(() => {
+      this.executeSql(NotificacionesSqLite.GET_ALL, []).then(
+        (data) => {
+          console.log("Sentencia ejecutada: ");
+          if(data.rows.length > 0) {
+              for(var i = 0; i < data.rows.length; i++) {
+                var notificacion = this.fromBD(data.rows.item(i));
+                notificaciones.push(notificacion);
+              }
+          }
+          this.cerrar();
+        },
+        (error) => {
+          console.error("Unable to execute sql: " + NotificacionesSqLite.GET_ALL, error);
+          this.cerrar();
+        }
+
+      );
+
+    }, (error) => {
+      console.error("Unable to open database", error);
+      this.cerrar();
+    });
+
+    /*
+    this.notifDesc = [
+      { "id": 129, "titulo": "VEFMTEVSIE5VRVZPIEVNUFJFTkRJTUlFTlRPIFNPQ0lBTCBZIFNPTElEQVJJTw==", "ultima_actualizacion": "2-11-2015 23:14:15" },
+      { "id": 131, "titulo": "WEkgSk9STkFEQVMgTUlDT0zDk0dJQ0FTICJQSUUgQVpVTCI=", "ultima_actualizacion": "2-11-2015 23:14:50" },
+      { "id": 132, "titulo": "T1RPw5FPIENVTFRVUkFMIFkgVFVSw41TVElDTyAyMDE2", "ultima_actualizacion": "2-12-2015 23:25:33" },
+      { "id": 133, "titulo": "UlVUQSBHQVNUUk9OT01JQ0EgREUgTEEgU0VUQSBZIExBIENBWkE=", "ultima_actualizacion": "2-11-2015 23:26:15" },
+      { "id": 135, "titulo": "UFJPWUVDVE8gUEVQSVRBUyBDVUxUVVJBIERFIExBIElHVUFMREFE", "ultima_actualizacion": "19-5-2016 22:32:24" }
+    ];
+
+    this.notificaciones = [
+      { "id": 129, "id_categoria": 1, "titulo": "VEFMTEVSIE5VRVZPIEVNUFJFTkRJTUlFTlRPIFNPQ0lBTCBZIFNPTElEQVJJTw==", "texto": "PGltZyBjbGFzcz0ic3BvdGxpZ2h0IiBhbHQ9IiIgc3JjPSJodHRwczovL3Njb250ZW50LXdhdzEtMS54eC5mYmNkbi5uZXQvdi90MS4wLTkvMTQ2ODA3MDhfMTExNjc0MjI5ODQwNDgwMV80MjQ5MzQ2MjQ3NDMwMzkzMzg1X24uanBnP29oPTViZmI3OTA0OWUyY2RiNmVmMTlkZWIzZTY5NGZlZjFmJmFtcDtvZT01ODk2RDM1QiIgd2lkdGg9IjUxMyIgaGVpZ2h0PSIzNjAiPjxicj5QQVJBIE3DgVMgSU5GT1JNQUNJw5NOIFBVRURFIExMQU1BUiBBTCA5MjU0MTY2MzYgREUgTEEgVU1ERiBMQVMgTU9SRVJBUzxicj4=", "fecha_caducidad": "9-11-2016 23:59:59", "fecha_inicio_validez": null, "fecha_fin_validez": null, "fecha_envio": "19-10-2016 18:31:52", "fecha_expiracion": null, "ultima_actualizacion": "19-10-2016 18:31:52" },
+      { "id": 131, "id_categoria": 1, "titulo": "WEkgSk9STkFEQVMgTUlDT0zDk0dJQ0FTICJQSUUgQVpVTCI=", "texto": "Jm5ic3A7PGltZyBzdHlsZT0iZGlzcGxheTogYmxvY2s7IG1hcmdpbi1sZWZ0OiBhdXRvOyBtYXJnaW4tcmlnaHQ6IGF1dG87IiBzcmM9Imh0dHA6Ly93d3cucGllYXp1bC5lcy9pbWFnZXMvc3Rvcmllcy9DYXJ0ZWwyMDE2LmpwZyIgYWx0PSIiIHdpZHRoPSI1MzciIGhlaWdodD0iNzU4Ij4=", "fecha_caducidad": "13-11-2016 23:59:59", "fecha_inicio_validez": null, "fecha_fin_validez": null, "fecha_envio": "25-10-2016 10:51:24", "fecha_expiracion": null, "ultima_actualizacion": "25-10-2016 10:51:24" },
+      { "id": 132, "id_categoria": 1, "titulo": "T1RPw5FPIENVTFRVUkFMIFkgVFVSw41TVElDTyAyMDE2", "texto": "PCEtLVtpZiBndGUgbXNvIDldPjx4bWw+DQogPG86T2ZmaWNlRG9jdW1lbnRTZXR0aW5ncz4NCiAgPG86UmVseU9uVk1MLz4NCiAgPG86QWxsb3dQTkcvPg0KIDwvbzpPZmZpY2VEb2N1bWVudFNldHRpbmdzPg0KPC94bWw+PCFbZW5kaWZdLS0+PCEtLVtpZiBndGUgbXNvIDldPjx4bWw+DQogPHc6V29yZERvY3VtZW50Pg0KICA8dzpWaWV3Pk5vcm1hbDwvdzpWaWV3Pg0KICA8dzpab29tPjA8L3c6Wm9vbT4NCiAgPHc6VHJhY2tNb3Zlcy8+DQogIDx3OlRyYWNrRm9ybWF0dGluZy8+DQogIDx3Okh5cGhlbmF0aW9uWm9uZT4yMTwvdzpIeXBoZW5hdGlvblpvbmU+DQogIDx3OlB1bmN0dWF0aW9uS2VybmluZy8+DQogIDx3OlZhbGlkYXRlQWdhaW5zdFNjaGVtYXMvPg0KICA8dzpTYXZlSWZYTUxJbnZhbGlkPmZhbHNlPC93OlNhdmVJZlhNTEludmFsaWQ+DQogIDx3Oklnbm9yZU1peGVkQ29udGVudD5mYWxzZTwvdzpJZ25vcmVNaXhlZENvbnRlbnQ+DQogIDx3OkFsd2F5c1Nob3dQbGFjZWhvbGRlclRleHQ+ZmFsc2U8L3c6QWx3YXlzU2hvd1BsYWNlaG9sZGVyVGV4dD4NCiAgPHc6RG9Ob3RQcm9tb3RlUUYvPg0KICA8dzpMaWRUaGVtZU90aGVyPkVTPC93OkxpZFRoZW1lT3RoZXI+DQogIDx3OkxpZFRoZW1lQXNpYW4+WC1OT05FPC93OkxpZFRoZW1lQXNpYW4+DQogIDx3OkxpZFRoZW1lQ29tcGxleFNjcmlwdD5YLU5PTkU8L3c6TGlkVGhlbWVDb21wbGV4U2NyaXB0Pg0KICA8dzpDb21wYXRpYmlsaXR5Pg0KICAgPHc6QnJlYWtXcmFwcGVkVGFibGVzLz4NCiAgIDx3OlNuYXBUb0dyaWRJbkNlbGwvPg0KICAgPHc6V3JhcFRleHRXaXRoUHVuY3QvPg0KICAgPHc6VXNlQXNpYW5CcmVha1J1bGVzLz4NCiAgIDx3OkRvbnRHcm93QXV0b2ZpdC8+DQogICA8dzpTcGxpdFBnQnJlYWtBbmRQYXJhTWFyay8+DQogICA8dzpFbmFibGVPcGVuVHlwZUtlcm5pbmcvPg0KICAgPHc6RG9udEZsaXBNaXJyb3JJbmRlbnRzLz4NCiAgIDx3Ok92ZXJyaWRlVGFibGVTdHlsZUhwcy8+DQogIDwvdzpDb21wYXRpYmlsaXR5Pg0KICA8bTptYXRoUHI+DQogICA8bTptYXRoRm9udCBtOnZhbD0iQ2FtYnJpYSBNYXRoIi8+DQogICA8bTpicmtCaW4gbTp2YWw9ImJlZm9yZSIvPg0KICAgPG06YnJrQmluU3ViIG06dmFsPSImIzQ1Oy0iLz4NCiAgIDxtOnNtYWxsRnJhYyBtOnZhbD0ib2ZmIi8+DQogICA8bTpkaXNwRGVmLz4NCiAgIDxtOmxNYXJnaW4gbTp2YWw9IjAiLz4NCiAgIDxtOnJNYXJnaW4gbTp2YWw9IjAiLz4NCiAgIDxtOmRlZkpjIG06dmFsPSJjZW50ZXJHcm91cCIvPg0KICAgPG06d3JhcEluZGVudCBtOnZhbD0iMTQ0MCIvPg0KICAgPG06aW50TGltIG06dmFsPSJzdWJTdXAiLz4NCiAgIDxtOm5hcnlMaW0gbTp2YWw9InVuZE92ciIvPg0KICA8L206bWF0aFByPjwvdzpXb3JkRG9jdW1lbnQ+DQo8L3htbD48IVtlbmRpZl0tLT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCiA8dzpMYXRlbnRTdHlsZXMgRGVmTG9ja2VkU3RhdGU9ImZhbHNlIiBEZWZVbmhpZGVXaGVuVXNlZD0idHJ1ZSINCiAgRGVmU2VtaUhpZGRlbj0idHJ1ZSIgRGVmUUZvcm1hdD0iZmFsc2UiIERlZlByaW9yaXR5PSI5OSINCiAgTGF0ZW50U3R5bGVDb3VudD0iMjY3Ij4NCiAgPHc6THNkRXhjZXB0aW9uIExvY2tlZD0iZmFsc2UiIFByaW9yaXR5PSIwIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgUUZvcm1hdD0idHJ1ZSIgTmFtZT0iTm9ybWFsIi8+DQogIDx3OkxzZEV4Y2VwdGlvbiBMb2NrZWQ9ImZhbHNlIiBQcmlvcml0eT0iOSIgU2VtaUhpZGRlbj0iZmFsc2UiDQogICBVbmhpZGVXaGVuVXNlZD0iZmFsc2UiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgMSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgMiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgMyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgNCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgNSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgNiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgNyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgOCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjkiIFFGb3JtYXQ9InRydWUiIE5hbWU9ImhlYWRpbmcgOSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgMSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgMiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgMyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgNCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgNSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgNiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgNyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgOCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM5IiBOYW1lPSJ0b2MgOSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjM1IiBRRm9ybWF0PSJ0cnVlIiBOYW1lPSJjYXB0aW9uIi8+DQogIDx3OkxzZEV4Y2VwdGlvbiBMb2NrZWQ9ImZhbHNlIiBQcmlvcml0eT0iMTAiIFNlbWlIaWRkZW49ImZhbHNlIg0KICAgVW5oaWRlV2hlblVzZWQ9ImZhbHNlIiBRRm9ybWF0PSJ0cnVlIiBOYW1lPSJUaXRsZSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjEiIE5hbWU9IkRlZmF1bHQgUGFyYWdyYXBoIEZvbnQiLz4NCiAgPHc6THNkRXhjZXB0aW9uIExvY2tlZD0iZmFsc2UiIFByaW9yaXR5PSIxIiBRRm9ybWF0PSJ0cnVlIiBOYW1lPSJCb2R5IFRleHQiLz4NCiAgPHc6THNkRXhjZXB0aW9uIExvY2tlZD0iZmFsc2UiIFByaW9yaXR5PSIxMSIgU2VtaUhpZGRlbj0iZmFsc2UiDQogICBVbmhpZGVXaGVuVXNlZD0iZmFsc2UiIFFGb3JtYXQ9InRydWUiIE5hbWU9IlN1YnRpdGxlIi8+DQogIDx3OkxzZEV4Y2VwdGlvbiBMb2NrZWQ9ImZhbHNlIiBQcmlvcml0eT0iMjIiIFNlbWlIaWRkZW49ImZhbHNlIg0KICAgVW5oaWRlV2hlblVzZWQ9ImZhbHNlIiBRRm9ybWF0PSJ0cnVlIiBOYW1lPSJTdHJvbmciLz4NCiAgPHc6THNkRXhjZXB0aW9uIExvY2tlZD0iZmFsc2UiIFByaW9yaXR5PSIyMCIgU2VtaUhpZGRlbj0iZmFsc2UiDQogICBVbmhpZGVXaGVuVXNlZD0iZmFsc2UiIFFGb3JtYXQ9InRydWUiIE5hbWU9IkVtcGhhc2lzIi8+DQogIDx3OkxzZEV4Y2VwdGlvbiBMb2NrZWQ9ImZhbHNlIiBQcmlvcml0eT0iNTkiIFNlbWlIaWRkZW49ImZhbHNlIg0KICAgVW5oaWRlV2hlblVzZWQ9ImZhbHNlIiBOYW1lPSJUYWJsZSBHcmlkIi8+DQogIDx3OkxzZEV4Y2VwdGlvbiBMb2NrZWQ9ImZhbHNlIiBVbmhpZGVXaGVuVXNlZD0iZmFsc2UiIE5hbWU9IlBsYWNlaG9sZGVyIFRleHQiLz4NCiAgPHc6THNkRXhjZXB0aW9uIExvY2tlZD0iZmFsc2UiIFByaW9yaXR5PSIxIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgUUZvcm1hdD0idHJ1ZSIgTmFtZT0iTm8gU3BhY2luZyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjYwIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTGlnaHQgU2hhZGluZyIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjYxIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTGlnaHQgTGlzdCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjYyIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTGlnaHQgR3JpZCIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjYzIiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTWVkaXVtIFNoYWRpbmcgMSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjY0IiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTWVkaXVtIFNoYWRpbmcgMiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjY1IiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTWVkaXVtIExpc3QgMSIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjY2IiBTZW1pSGlkZGVuPSJmYWxzZSINCiAgIFVuaGlkZVdoZW5Vc2VkPSJmYWxzZSIgTmFtZT0iTWVkaXVtIExpc3QgMiIvPg0KICA8dzpMc2RFeGNlcHRpb24gTG9ja2VkPSJmYWxzZSIgUHJpb3JpdHk9IjY=", "fecha_caducidad": "4-12-2016 23:59:59", "fecha_inicio_validez": null, "fecha_fin_validez": null, "fecha_envio": "25-10-2016 12:20:30", "fecha_expiracion": null, "ultima_actualizacion": "25-10-2016 12:20:30" },
+      { "id": 133, "id_categoria": 1, "titulo": "UlVUQSBHQVNUUk9OT01JQ0EgREUgTEEgU0VUQSBZIExBIENBWkE=", "texto": "PGltZyBjbGFzcz0ic3BvdGxpZ2h0IiBhbHQ9IiIgc3JjPSJodHRwczovL3Njb250ZW50LW1hZDEtMS54eC5mYmNkbi5uZXQvdi90MS4wLTkvMTQ2NTA2MjBfMTEyNjE1NTQzNzQ2MzQ4N18yMjU1MjYyMjEzNzcwMTIyNDU3X24uanBnP29oPTQ1OTdkNGYxOTFjYTYzYjlmMzIzNmVmZDEwYWJiYTE4JmFtcDtvZT01ODk5Q0EyRSIgd2lkdGg9IjQ3OCIgaGVpZ2h0PSI2NzciPg==", "fecha_caducidad": "13-11-2016 23:59:59", "fecha_inicio_validez": null, "fecha_fin_validez": null, "fecha_envio": "27-10-2016 13:49:28", "fecha_expiracion": null, "ultima_actualizacion": "27-10-2016 13:49:28" },
+      { "id": 135, "id_categoria": 1, "titulo": "UFJPWUVDVE8gUEVQSVRBUyBDVUxUVVJBIERFIExBIElHVUFMREFE", "texto": "PGltZyBjbGFzcz0ic3BvdGxpZ2h0IiBhbHQ9IiIgc3JjPSJodHRwczovL3Njb250ZW50LW1hZDEtMS54eC5mYmNkbi5uZXQvdDMxLjAtOC9zOTYweDk2MC8xNDg4MjI5OV8xMTMzNjE3Njc2NzE3MjYzXzYzODAxMTEwODczODU1ODE3MTFfby5qcGciIHdpZHRoPSI1MzQiIGhlaWdodD0iNzUzIj4=", "fecha_caducidad": "11-11-2016 23:59:59", "fecha_inicio_validez": null, "fecha_fin_validez": null, "fecha_envio": "4-11-2016 16:49:21", "fecha_expiracion": null, "ultima_actualizacion": "4-11-2016 16:49:21" },
+
+    ];
+
+    for (var i = 0; i < this.notificaciones.length; i++) {
+      var notif = new Notificacion();
+      var notifTmp = this.notificaciones[i];
+      notif.id = notifTmp.id;
+      notif.idCategoria = notifTmp.idCategoria;
+      notif.titulo = Base64.decode(notifTmp.titulo);
+      notif.texto = Base64.decode(notifTmp.texto);
+      notif.fechaInicioValidez = notifTmp.fechaInicioValidez;
+      notif.fechaFinValidez = notifTmp.fechaFinValidez;
+      notif.ultimaActualizacion = notifTmp.ultimaActualizacion;
+      //19-5-2016 22:32:24
+      // "19-5-2016 22:32:24".replace(pattern, "$3-$2-$1T$4:$5:$6Z");
+      // "19-5-2016 22:32:24".match(pattern);
+      var pattern = /(\d?\d)-(\d?\d)-(\d{4})\s(\d{2}):(\d{2}):(\d{2})/g;
+      new Date();
+      notificaciones.push(notif);
+    }
+    */
+  }
+
+  private fromBD(fila: any): Notificacion {
+    var resul = new Notificacion();
+    resul.id = fila.id;
+    resul.idCategoria = fila.id_categoria;
+    resul.titulo = fila.titulo;
+    resul.texto = fila.texto;
+    resul.fechaInicioValidez = new Date(fila.fecha_inicio_validez);
+    resul.fechaFinValidez = new Date(fila.fecha_fin_validez);
+    resul.ultimaActualizacion = new Date(fila.ultima_actualizacion);
+
+    return resul;
+  }
+
+  private toBD(notificacion: Notificacion) {
+    return [notificacion.id, notificacion.idCategoria, notificacion.titulo,
+      notificacion.texto, notificacion.fechaInicioValidez.getTime(),
+      notificacion.fechaFinValidez.getTime(), notificacion.ultimaActualizacion.getTime()];
+  }
+
+}

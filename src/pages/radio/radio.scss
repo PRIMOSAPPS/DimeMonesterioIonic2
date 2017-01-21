@@ -1,0 +1,81 @@
+.radio {
+  $altoRadioControles: 10%;
+  $altoSlider: 100% - $altoRadioControles;
+
+  .radio-controles {
+    background-color: #000000;
+    position: absolute;
+    height: $altoRadioControles;
+    bottom: 0;
+    padding: 0px;
+  }
+
+  .radio-controles ion-row, .radio-controles ion-col {
+    height: 100%;
+  }
+
+  .radio-controles ion-col {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .radio-controles img {
+    height: 100%;
+  }
+
+  .fondoCompleto {
+    width: 100%;
+    height: $altoSlider;
+  }
+
+  .fondoCompleto div.slide-zoom,
+  .fondoCompleto div.slide-zoom img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .radio-mensaje-error {
+    background-color: rgba(244, 224, 95, 0.5);
+    width: 100%;
+    height: 30px;
+    font-size: 12px;
+    color: #000;
+    z-index: 10;
+    position: absolute;
+    bottom: $altoRadioControles;
+  }
+
+  .radio-mensaje-error ion-label {
+    margin: 0px;
+  }
+
+  .menos-volumen img {
+    margin-left: 0;
+    margin-right: auto;
+    display: block;
+  }
+
+  .errorReproduccion {
+    display: block;
+  }
+
+  .reproduccionCorrecta {
+    display: none;
+  }
+
+  .play {
+    background: url("../../img/iconradio/radio_monesterio_play.png") no-repeat fixed center;
+    background-size: 80%;
+  }
+
+  .pause {
+    background: url('../../img/iconradio/radio_monesterio_pause.png') no-repeat fixed center;
+    background-size: 80%;
+  }
+
+  .mas-volumen img {
+    margin-left: auto;
+    margin-right: 0;
+    display: block;
+  }
+}
