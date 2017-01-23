@@ -6,12 +6,13 @@ import { MailSender } from '../../providers/mail-sender/mailsender';
 import { MailContentDto } from '../../providers/mail-sender/mailcontent-dto';
 import { ImagenMailDto } from '../../providers/mail-sender/imagenmail-dto';
 
-import { ModalController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { File } from 'ionic-native';
+import { ModalController, AlertController } from 'ionic-angular';
 
 import { DialogoSlider } from './dialogo-slider';
 import { DialogoConfirmacion } from './dialogo-confirmacion';
 import { DialogoSinDireccion } from './dialogo-sindireccion';
+
+import { Config } from '../../config/config';
 
 
 
@@ -85,33 +86,13 @@ export class ColaboracionCiudadanaPage implements GpsListener {
     //this.camara.sacarFoto().then(
       (imagen) => {
         console.log("Sacada foto.");
-        this.fotosRealizadas.push('data:image/jpeg;base64,' + imagen);
+        this.fotosRealizadas.push(Config.DATA_IMAGE_JPG_BASE64 + imagen);
+        //this.fotosRealizadas.push(imagen);
       },
       (error) => console.log("Error al sacar la foto: " + error)
     );
 
-
-    /*
-    Camera.getPicture({
-        sourceType: Camera.PictureSourceType.CAMERA,
-        destinationType: Camera.DestinationType.DATA_URL
-    }).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64:
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-    }, (err) => {
-
-      let alert = this.alertCtrl.create({
-        title: 'Low battery',
-        subTitle: err,
-        buttons: ['Dismiss']
-      });
-      alert.present();
-      // Handle error
-    });
-    */
     console.log("Pulsado: sacarFoto");
-    //this.camara.sacarFoto().then();
   }
 
   mostrarSlider(foto) {
@@ -190,20 +171,8 @@ export class ColaboracionCiudadanaPage implements GpsListener {
     resul.imagenes = new Array();
     for(var i=0; i<this.fotosRealizadas.length; i++) {
       var imagen = new ImagenMailDto();
-      imagen.nombre = this.fotosRealizadas[i];
-      imagen.imagen = "Relleno";
-      var nombreFile = imagen.nombre.split(/[\\/]/).pop();
-      var pathFile = imagen.nombre.substring(0, imagen.nombre.length - nombreFile.length);
-      var nombreCompleto = pathFile + nombreFile;
-      File.checkFile(pathFile, nombreFile).then(
-        () => {
-          File.readAsBinaryString(pathFile, nombreFile).then(
-            (data) => console.log("leido el fichero: " + nombreCompleto + ": " + data),
-            (error) => {console.error("Error al leer el fichero: " + nombreCompleto + " -- " + error)}
-          );
-        },
-        (error) => {console.error("Error al leer el fichero: " + nombreCompleto + " -- " + error)}
-      );
+      imagen.nombre = "Imagen_" + i + ".jpg";
+      imagen.imagen = this.fotosRealizadas[i];
       resul.imagenes.push(imagen);
     }
 

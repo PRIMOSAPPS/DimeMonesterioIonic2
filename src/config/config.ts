@@ -24,6 +24,8 @@ export class Config {
 
   }
 
+  public static get DATA_IMAGE_JPG_BASE64(): string {return "data:image/jpeg;base64,";};
+
   public static get TABLE_NAME(): string { return 'sitios'; }
 
   public static get URL_RADIO(): string {return Config.conf.urlRadio};
@@ -33,6 +35,8 @@ export class Config {
   public static get URL_NOTIFICACIOPNES_DESCARGABLES(): string {return Config.urlNotificacionesDescarghables};
 
   public static get URL_NOTIFICACION(): string {return Config.urlNotificaciones};
+
+  public static get URL_ENVIO_CORREO(): string {return Config.conf.urlEnvioCorreo};
 
   public static get IMAGENES_SLIDER(): Array<string> {return ["img/slide001.jpg", "img/slide002.jpg", "img/slide003.jpg",
     "img/slide004.jpg", "img/slide005.jpg", "img/slide006.jpg", "img/slide007.jpg"]};

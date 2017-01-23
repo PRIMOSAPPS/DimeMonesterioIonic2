@@ -25,6 +25,9 @@ export class DialogoSlider {
 
   constructor(params: NavParams, public viewCtrl: ViewController) {
     this.imagenesSlider = params.get("imagenes");
+    for(var i=0; i<this.imagenesSlider.length; i++) {
+      this.imagenesSlider[i] = this.imagenesSlider[i];
+    }
     this.claseSlider = "fondoSlider";
   }
 

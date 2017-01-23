@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions, Request, RequestMethod } from '@angular/http';
 
 import { MailContentDto } from './mailcontent-dto';
+
+import { Config } from '../../config/config';
 
 @Injectable()
 export class MailSender {
@@ -11,8 +13,36 @@ export class MailSender {
 
   enviarMail(contenido: MailContentDto) {
     var contenidoMsj = this.crearMensaje(contenido);
-    console.log("[MailSender] Se envia un correo con el siguiente contenido: " +
-      contenidoMsj);
+    console.log("[MailSender] Se envia un correo a: " + Config.URL_ENVIO_CORREO);
+    //console.log("[MailSender] Se envia un correo con el siguiente contenido: " +
+    //  contenidoMsj);
+
+    let headers = new Headers({ 'Content-Type': 'text/xml' });
+    let options = new RequestOptions({
+      headers: headers,
+    });
+    this.http.post(Config.URL_ENVIO_CORREO, contenidoMsj, options)
+            .subscribe(
+              resultado => console.log("1 Parece que se ha enviado correctamente: " + resultado),
+              error => console.log("Se ha producido un error en el envio: " + error)
+            );
+
+
+            /*
+    let options2 = new RequestOptions({
+      headers: headers,
+      url: Config.URL_ENVIO_CORREO,
+      body: contenidoMsj,
+      method: RequestMethod.Post
+    });
+    this.http.request(new Request(options2)).map(
+            result => {
+              console.log("2 El resultado es: " + result);
+              //let data = result.json();
+              //return data;
+            }
+        );
+        */
   }
 
   private getValor(tag: string, valor: string): string {
@@ -53,34 +83,21 @@ export class MailSender {
       var imagen = contenido.imagenes[i];
       resul += "<imagen>";
       resul += this.getValor("nombreImagen", imagen.nombre);
-      resul += this.getValor("contenidoImagen", imagen.imagen);
+      var imagenSinPrevio = this.imagenSinPrevio(imagen.imagen);
+      resul += this.getValor("contenidoImagen", imagenSinPrevio);
       resul += "</imagen>";
     }
 
-    resul += "<contenidoIncidencia>";
+    resul += "</contenidoIncidencia>";
 
-    /*
-    dataTagIniNombreImagen = "<nombreImagen>".toCharArray();
-    char[] dataTagFinNombreImagen = "</nombreImagen>".toCharArray();
-    char[] dataTagIniImagen = "<imagen>".toCharArray();
-    char[] dataTagFinImagen = "</imagen>".toCharArray();
-    char[] dataTagIniContenidoImagen = "<contenidoImagen>".toCharArray();
-    char[] dataTagFinContenidoImagen = "</contenidoImagen>".toCharArray();
-    char[] dataFin = "</contenidoIncidencia>".toCharArray();
-    Iterator respCode = this.lstUrisFotos.iterator();
+    return resul;
+  }
 
-    while(respCode.hasNext()) {
-        Uri respMess = (Uri)respCode.next();
-        osw.write(dataTagIniImagen);
-        osw.write(dataTagIniNombreImagen);
-        osw.write(respMess.getLastPathSegment().toCharArray());
-        osw.write(dataTagFinNombreImagen);
-        osw.write(dataTagIniContenidoImagen);
-        osw.write(this.getCharArray(respMess));
-        osw.write(dataTagFinContenidoImagen);
-        osw.write(dataTagFinImagen);
+  private imagenSinPrevio(imagen: string): string {
+    var resul = imagen;
+    if(imagen.startsWith(Config.DATA_IMAGE_JPG_BASE64)) {
+      resul = imagen.substring(Config.DATA_IMAGE_JPG_BASE64.length);
     }
-    */
 
     return resul;
   }

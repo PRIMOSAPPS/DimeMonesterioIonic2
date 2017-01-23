@@ -11,8 +11,6 @@ import { ImagenesSqLite } from '../providers/dao/imagenes-sitio-sqlite/imagenes-
 
 import {HelloIonicPage} from '../pages/hello-ionic/hello-ionic';
 
-import {ListPage} from '../pages/list/list';
-
 import {ColaboracionCiudadanaPage} from '../pages/colaboracion-ciudadana/colaboracion-ciudadana';
 import {ListPuntosInteresPage} from '../pages/list-puntos-interes/list-puntos-interes';
 
