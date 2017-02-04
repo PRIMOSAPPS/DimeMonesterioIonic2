@@ -5,6 +5,8 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 //import { Storage, SqlStorage } from 'ionic-framework/ionic';
 import { Storage } from '@ionic/storage';
 
+import { Notificacion } from '../dto/notificacion/notificacion';
+
 import { NotificacionesSqLite } from '../providers/dao/notificaciones-sqlite/notificaciones-sqlite';
 import { SitiosSqLite } from '../providers/dao/sitios-sq-lite/sitios-sq-lite';
 import { ImagenesSqLite } from '../providers/dao/imagenes-sitio-sqlite/imagenes-sitio-sqlite';
@@ -24,8 +26,11 @@ import {Config} from '../config/config';
 import { LectorNotificaciones } from '../providers/lector-notificaciones/lector-notificaciones';
 import { LectorSitios } from '../providers/lector-sitios/lector-sitios';
 
-//import { Page1 } from '../pages/page1/page1';
-//import { Page2 } from '../pages/page2/page2';
+//import { Push, PushToken } from '@ionic/cloud-angular';
+
+import { UtilFecha } from '../providers/util-fecha';
+
+declare var FCMPlugin:any;
 
 
 @Component({
@@ -42,6 +47,8 @@ export class MyApp {
     public menu: MenuController,
     private http: Http,
     private storage: Storage,
+    //private push: Push,
+    //private notificacionesSqLite: NotificacionesSqLite
   ) {
     this.initializeApp();
 
@@ -83,10 +90,67 @@ export class MyApp {
             },
             (err) => { console.log("ERROR LEYENDO LOCALSTORAGE: " + MyApp.PRIMER_ARRANQUE); })
             .catch((err) => { console.log("Error leyendo la variable " + MyApp.PRIMER_ARRANQUE); });
+
+          //this.registerPushNotifications();
+
+          this.registrarFirebase();
         }
       );
     });
   }
+
+  registrarFirebase() {
+    FCMPlugin.subscribeToTopic('allDevices');
+
+    FCMPlugin.onTokenRefresh(function(token){
+      console.log("[FCMPlugin.onTokenRefresh] " + token );
+    });
+
+    FCMPlugin.onNotification(function(data){
+      if(data.wasTapped){
+        //Notification was received on device tray and tapped by the user.
+        console.log("[FCMPlugin.onNotification data.wasTapped] " + JSON.stringify(data) );
+      }else{
+        //Notification was received in foreground. Maybe the user needs to be notified.
+        console.log("[FCMPlugin.onNotification NO data.wasTapped] " + JSON.stringify(data) );
+      }
+  });
+  }
+
+  /*
+  registerPushNotifications() {
+    console.log("[registerPushNotifications]");
+
+    this.push.register().then((t: PushToken) => {
+      console.log("[registerPushNotifications] Notificacion recibida: " + t);
+      let saveOptions = { ignore_user: true };
+        return this.push.saveToken(t);
+      }).then((t: PushToken) => {
+        console.log('Token saved:', t.token);
+      });
+
+    this.push.rx.notification()
+    .subscribe((msg) => {
+      console.log("[registerPushNotifications] this.ppush.rx.notification: " + JSON.stringify(msg));
+
+      var datos = msg.raw.additionalData;
+
+      var notificacion = new Notificacion();
+      notificacion.id = datos["id"];
+      notificacion.idCategoria = datos["id_categoria"];
+      notificacion.titulo = datos["titulo"];
+      notificacion.texto = datos["texto"];
+      notificacion.fechaInicioValidez = new Date(UtilFecha.toISO(datos["fiv"]));
+      notificacion.fechaFinValidez = new Date(UtilFecha.toISO(datos["fiv"]));
+      notificacion.ultimaActualizacion = new Date();
+
+      //this.notificacionesSqLite.add(notificacion);
+
+      alert(datos["titulo"] + ': ' + datos["texto"]);
+    });
+
+  }
+  */
 
   accionesPrimerArranque() {
     try {

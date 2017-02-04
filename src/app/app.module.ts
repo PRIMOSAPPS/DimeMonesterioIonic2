@@ -20,6 +20,32 @@ import { DetalleNotificacionPage } from '../pages/detalle-notificacion/detalle-n
 import { PreferenciasPage } from '../pages/preferencias/preferencias';
 import { RadioPage } from '../pages/radio/radio';
 
+//import { MapsGoogleApis } from '../providers/mapsgoogleapis/mapsgoogleapis';
+
+
+//import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
+/*
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': 'f218dc35'
+  },
+  'push': {
+    'sender_id': '450346327553',
+    'pluginConfig': {
+      'ios': {
+        'badge': true,
+        'sound': true
+      },
+      'android': {
+        'iconColor': '#343434',
+        'topics': ["allDevices"]
+      }
+    }
+  }
+};
+*/
+
 @NgModule({
   declarations: [
     MyApp,
@@ -37,10 +63,11 @@ import { RadioPage } from '../pages/radio/radio';
     ListPuntosInteresPage,
     DetalleSitioPage,
     NotificacionesPage,
-    DetalleNotificacionPage
+    DetalleNotificacionPage,
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    //CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,7 +86,7 @@ import { RadioPage } from '../pages/radio/radio';
     ListPuntosInteresPage,
     DetalleSitioPage,
     NotificacionesPage,
-    DetalleNotificacionPage
+    DetalleNotificacionPage,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [Storage, {provide: ErrorHandler, useClass: IonicErrorHandler}]

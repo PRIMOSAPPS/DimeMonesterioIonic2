@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import {Gps, GpsListener} from '../../providers/gps';
+import { MapsGoogleApis } from '../../providers/mapsgoogleapis/mapsgoogleapis';
 import {Camara} from '../../providers/camara/camara';
 import { MailSender } from '../../providers/mail-sender/mailsender';
 import { MailContentDto } from '../../providers/mail-sender/mailcontent-dto';
@@ -14,8 +15,6 @@ import { DialogoSinDireccion } from './dialogo-sindireccion';
 
 import { Config } from '../../config/config';
 
-
-
 export {DialogoSlider, DialogoSinDireccion, DialogoConfirmacion}
 
 /*
@@ -26,7 +25,7 @@ export {DialogoSlider, DialogoSinDireccion, DialogoConfirmacion}
 */
 @Component({
   templateUrl: 'colaboracion-ciudadana.html',
-  providers: [Camara, MailSender]
+  providers: [Camara, MailSender, Gps, MapsGoogleApis]
 })
 export class ColaboracionCiudadanaPage implements GpsListener {
 
@@ -48,10 +47,10 @@ export class ColaboracionCiudadanaPage implements GpsListener {
   comentario: string;
 
   private idGpsListener: number;
-  private gps: Gps;
+  //private gps: Gps;
 
   constructor(public modalCtrl: ModalController, public camara: Camara, private alertCtrl: AlertController,
-      private mailSender: MailSender) {
+      private mailSender: MailSender, private gps: Gps) {
     this.direccion = "Dirección no calculada";
     this.telefono = "666555444";
     this.correo = "dsfdf@gmail.com";
@@ -73,7 +72,7 @@ export class ColaboracionCiudadanaPage implements GpsListener {
     this.opcionesResiduos = [this.seleccionResiduos, 'Papel / cartón', 'Vidrio',
       'Plásticos'];
 
-    this.gps = new Gps();
+    //this.gps = new Gps();
     this.gps.addListener(this);
   }
 
@@ -188,9 +187,10 @@ export class ColaboracionCiudadanaPage implements GpsListener {
   }
 
   // Metodos de la interfaz GpsListener
-  nuevaPosicion(posicion) {
-    console.log("recibida una direccion.");
-    this.direccion = "Tenemos direccion :)";
+  nuevaPosicion(direccion) {
+    console.log("recibida una direccion: " + direccion);
+    this.direccion = direccion;
+    this.direccionCalculada = true;
   }
 
   getId(): number {
