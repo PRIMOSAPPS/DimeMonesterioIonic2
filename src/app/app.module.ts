@@ -20,6 +20,8 @@ import { DetalleNotificacionPage } from '../pages/detalle-notificacion/detalle-n
 import { PreferenciasPage } from '../pages/preferencias/preferencias';
 import { RadioPage } from '../pages/radio/radio';
 
+//import { NotificacionesSqLite } from '../providers/dao/notificaciones-sqlite/notificaciones-sqlite';
+
 //import { MapsGoogleApis } from '../providers/mapsgoogleapis/mapsgoogleapis';
 
 

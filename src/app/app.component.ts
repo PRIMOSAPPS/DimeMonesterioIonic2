@@ -34,7 +34,8 @@ declare var FCMPlugin:any;
 
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [NotificacionesSqLite]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -48,9 +49,11 @@ export class MyApp {
     private http: Http,
     private storage: Storage,
     //private push: Push,
-    //private notificacionesSqLite: NotificacionesSqLite
+    private notificacionesSqLite: NotificacionesSqLite
   ) {
+
     this.initializeApp();
+    console.log("INICIO: " + this.notificacionesSqLite);
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -106,7 +109,20 @@ export class MyApp {
       console.log("[FCMPlugin.onTokenRefresh] " + token );
     });
 
-    FCMPlugin.onNotification(function(data){
+    FCMPlugin.onNotification( (data) => {
+    //FCMPlugin.onNotification(function(data){
+      var notificacion = new Notificacion();
+      notificacion.id = data.id;
+      notificacion.idCategoria = data.id_categoria;
+      notificacion.titulo = data.titulo;//Base64.decode(data.titulo);
+      notificacion.texto = data.texto;//Base64.decode(data.texto);
+      notificacion.fechaInicioValidez = new Date(UtilFecha.toISO(data.fiv));
+      notificacion.fechaFinValidez = new Date(UtilFecha.toISO(data.ffv));
+      notificacion.ultimaActualizacion = new Date();
+
+      this.notificacionesSqLite.add(notificacion);
+
+      /*
       if(data.wasTapped){
         //Notification was received on device tray and tapped by the user.
         console.log("[FCMPlugin.onNotification data.wasTapped] " + JSON.stringify(data) );
@@ -114,6 +130,7 @@ export class MyApp {
         //Notification was received in foreground. Maybe the user needs to be notified.
         console.log("[FCMPlugin.onNotification NO data.wasTapped] " + JSON.stringify(data) );
       }
+      */
     });
   }
 
