@@ -114,7 +114,7 @@ export class MyApp {
         //Notification was received in foreground. Maybe the user needs to be notified.
         console.log("[FCMPlugin.onNotification NO data.wasTapped] " + JSON.stringify(data) );
       }
-  });
+    });
   }
 
   /*

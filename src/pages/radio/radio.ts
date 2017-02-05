@@ -37,7 +37,7 @@ export class RadioPage {
     this.imagenesSlider = Config.IMAGENES_SLIDER;
 
     this.radio = new RadioPlayer(Config.URL_RADIO);
-    this.play();
+    //this.play();
   }
 
   reproduccionCorrecta() {
@@ -71,6 +71,16 @@ export class RadioPage {
   pause() {
     this.radio.pause();
     this.reproduciendo = false;
+  };
+
+  ionViewDidEnter() {
+    console.log("[ionViewDidEnter] ...");
+    this.play();
+  };
+
+  ionViewDidLeave() {
+    console.log("[ionViewDidLeave] ...");
+    this.pause();
   };
 
 }
