@@ -36,6 +36,11 @@ export class NotificacionesSqLite extends AbstractDao<Notificacion> {
     return "SELECT " + NotificacionesSqLite.ALL_COLUMNS + " from " + NotificacionesSqLite.TABLE_NAME;
   }
 
+  private static get GET_DELETE_CADUCADAS(): string {
+    var ahora = new Date();
+    return "DELETE FROM " + NotificacionesSqLite.TABLE_NAME + " WHERE fecha_fin_validez < " + ahora.getTime();
+  }
+
   ////////////////////////////////////////////////
   constructor(private platform: Platform) {
     super();
@@ -57,6 +62,25 @@ export class NotificacionesSqLite extends AbstractDao<Notificacion> {
     resul.fechaFinValidez = new Date(fila.fecha_fin_validez);
     resul.ultimaActualizacion = new Date(fila.ultima_actualizacion);
 
+    return resul;
+  }
+
+  borrarCaducadas(): Promise<any> {
+    var resul = new Promise((resolve, reject) => {
+      return this.abrir().then(
+        () => {
+          this.executeSql(NotificacionesSqLite.GET_DELETE_CADUCADAS, []).then(
+            (b) => resolve(b),
+            (error) => {
+              console.error("[NotificacionesSqLite.borrarCaducadas] Error al borrar las notificaciones caducadas: " + error);
+              this.cerrar().then(() => {reject(false);});
+            });
+        }, (error) => {
+          console.error("[NotificacionesSqLite.borrarCaducadas] Error al abrir la base de datos abierta: " + error);
+          this.cerrar().then(() => {reject(false);});
+        }
+      );
+    });
     return resul;
   }
 

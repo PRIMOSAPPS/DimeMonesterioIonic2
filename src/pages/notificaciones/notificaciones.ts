@@ -24,7 +24,11 @@ export class NotificacionesPage {
   constructor(private navCtrl: NavController, private notificacionesSqLite : NotificacionesSqLite,
   private alertCtrl: AlertController) {
     this.notificaciones = new Array();
-    this.cargar();
+
+    this.notificacionesSqLite.borrarCaducadas().then(
+      d => this.cargar(),
+      error =>  this.cargar()
+    );
   }
 
   cargar() {

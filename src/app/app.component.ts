@@ -20,6 +20,8 @@ import {RadioPage} from '../pages/radio/radio';
 
 import {NotificacionesPage} from '../pages/notificaciones/notificaciones';
 
+import { DetalleNotificacionPage } from '../pages/detalle-notificacion/detalle-notificacion';
+
 import { Http } from '@angular/http';
 import {Config} from '../config/config';
 
@@ -30,12 +32,16 @@ import { LectorSitios } from '../providers/lector-sitios/lector-sitios';
 
 import { UtilFecha } from '../providers/util-fecha';
 
+import {Preferencias} from '../providers/preferencias/preferencias';
+
 declare var FCMPlugin:any;
+
+declare var cordova:any;
 
 
 @Component({
   templateUrl: 'app.html',
-  providers: [NotificacionesSqLite]
+  providers: [NotificacionesSqLite, Preferencias]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -49,7 +55,8 @@ export class MyApp {
     private http: Http,
     private storage: Storage,
     //private push: Push,
-    private notificacionesSqLite: NotificacionesSqLite
+    private notificacionesSqLite: NotificacionesSqLite,
+    private preferencias: Preferencias
   ) {
 
     this.initializeApp();
@@ -122,15 +129,54 @@ export class MyApp {
 
       this.notificacionesSqLite.add(notificacion);
 
-      /*
-      if(data.wasTapped){
-        //Notification was received on device tray and tapped by the user.
-        console.log("[FCMPlugin.onNotification data.wasTapped] " + JSON.stringify(data) );
-      }else{
-        //Notification was received in foreground. Maybe the user needs to be notified.
-        console.log("[FCMPlugin.onNotification NO data.wasTapped] " + JSON.stringify(data) );
-      }
-      */
+      this.lanzarNotificacion(notificacion);
+
+
+
+      cordova.plugins.notification.local.on("click", notification => {
+        console.log("Recibida una notificacion.");
+        var notif = JSON.parse(notification.data);
+        this.notificacionSeleccionada(notif.notificacion);
+      });
+
+      //if(data.wasTapped){
+      //  //Notification was received on device tray and tapped by the user.
+      //  console.log("[FCMPlugin.onNotification data.wasTapped] " + JSON.stringify(data) );
+      //}else{
+      //  //Notification was received in foreground. Maybe the user needs to be notified.
+      //  console.log("[FCMPlugin.onNotification NO data.wasTapped] " + JSON.stringify(data) );
+      //}
+    });
+  }
+
+  lanzarNotificacion(notificacion: Notificacion) {
+    var valorLed = "000000";
+    var sonido = "";
+
+    var mostrarLed = this.preferencias.getPrefLed();
+    if(mostrarLed) {
+      valorLed = "FFFFFF";
+    }
+
+    var sonar = this.preferencias.getPrefSonido();
+    if(sonar) {
+      sonido = "res://platform_default";
+    }
+
+    var opciones = {
+      id: notificacion.id,
+      text: notificacion.titulo,
+      led: valorLed,
+      sound: sonido,
+      data: { notificacion: notificacion }
+    };
+
+    cordova.plugins.notification.local.schedule(opciones);
+  }
+
+  notificacionSeleccionada(notificacion) {
+    this.nav.setRoot(DetalleNotificacionPage, {
+      notificacion: notificacion
     });
   }
 
@@ -170,6 +216,13 @@ export class MyApp {
   */
 
   accionesPrimerArranque() {
+    try {
+      this.preferencias.setPrefSonido(true);
+      this.preferencias.setPrefVibrar(true);
+      this.preferencias.setPrefLed(true);
+    } catch(e) {
+      console.error("[accionesPrimerArranque] Error al inicializar las preefrencias");
+    }
     try {
       // Se crean las bases de datos.
       var notifiSqlite = new NotificacionesSqLite(this.platform);
