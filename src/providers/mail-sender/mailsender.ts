@@ -23,8 +23,8 @@ export class MailSender {
     });
     this.http.post(Config.URL_ENVIO_CORREO, contenidoMsj, options)
             .subscribe(
-              resultado => console.log("1 Parece que se ha enviado correctamente: " + resultado),
-              error => console.log("Se ha producido un error en el envio: " + error)
+              (resultado) => console.log("1 Parece que se ha enviado correctamente: " + resultado),
+              (error) => console.log("Se ha producido un error en el envio: " + error)
             );
 
 

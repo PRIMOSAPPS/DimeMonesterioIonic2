@@ -110,14 +110,23 @@ export class MyApp {
   }
 
   registrarFirebase() {
-    FCMPlugin.subscribeToTopic('allDevices');
+    FCMPlugin.subscribeToTopic('allDevices',
+      function(msg){console.log("[FCMPlugin.subscribeToTopic] registrado correctamente a allDevices");},
+      function(error){console.log("[FCMPlugin.subscribeToTopic] Se ha producido un error al registrarse a allDevices");});
 
     FCMPlugin.onTokenRefresh(function(token){
       console.log("[FCMPlugin.onTokenRefresh] " + token );
     });
 
+    FCMPlugin.getToken(function(token){
+      console.log("[FCMPlugin.getToken] Se ha recogido un token: " + token);
+    }, function(error){
+      console.log("[FCMPlugin.getToken] Se ha producido error: " + error);
+    });
+
     FCMPlugin.onNotification( (data) => {
     //FCMPlugin.onNotification(function(data){
+      console.log("[FCMPlugin.onNotification] Recibida una notificacion: " + data);
       var notificacion = new Notificacion();
       notificacion.id = data.id;
       notificacion.idCategoria = data.id_categoria;
@@ -129,15 +138,23 @@ export class MyApp {
 
       this.notificacionesSqLite.add(notificacion);
 
-      this.lanzarNotificacion(notificacion);
+      //this.lanzarNotificacion(notificacion);
+
+      //if(data.wasTapped){
+        this.nav.setRoot(DetalleNotificacionPage, {
+          notificacion: notificacion
+        });
+      //}
 
 
 
+      /*
       cordova.plugins.notification.local.on("click", notification => {
-        console.log("Recibida una notificacion.");
+        console.log("[Loca.notificacion] Recibida una notificacion.");
         var notif = JSON.parse(notification.data);
         this.notificacionSeleccionada(notif.notificacion);
       });
+      */
 
       //if(data.wasTapped){
       //  //Notification was received on device tray and tapped by the user.
@@ -149,6 +166,7 @@ export class MyApp {
     });
   }
 
+  /*
   lanzarNotificacion(notificacion: Notificacion) {
     var valorLed = "000000";
     var sonido = "";
@@ -163,22 +181,27 @@ export class MyApp {
       sonido = "res://platform_default";
     }
 
+    console.log("Se lanza la notificacion local.");
     var opciones = {
       id: notificacion.id,
       text: notificacion.titulo,
       led: valorLed,
       sound: sonido,
+      icon: "file://img/icon.png",
       data: { notificacion: notificacion }
     };
 
     cordova.plugins.notification.local.schedule(opciones);
   }
+  */
 
+  /*
   notificacionSeleccionada(notificacion) {
     this.nav.setRoot(DetalleNotificacionPage, {
       notificacion: notificacion
     });
   }
+  */
 
   /*
   registerPushNotifications() {
