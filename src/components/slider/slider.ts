@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+
+import {Slides} from 'ionic-angular'
 
 
 /*
@@ -15,7 +17,7 @@ import { Component, Input } from '@angular/core';
 export class MiSlider {
   /*
   myOptions = {
-    //effect: 'fade',
+    //effect: 'fade', // slide, fade, cube, coverflow or flip
     autoplay: 500,
     autoplayDisableOnInteraction: false,
     loop: true,
@@ -24,7 +26,9 @@ export class MiSlider {
   };
   */
   @Input()
-  sliderOptions: Object;
+  sliderOptions: any;
+
+  @ViewChild(Slides) slides: Slides;
 
   @Input()
   clase: string;
@@ -34,4 +38,14 @@ export class MiSlider {
 
   constructor() {
   }
+
+  ngAfterViewInit() {
+      this.slides.autoplay = this.sliderOptions.autoplay;
+      this.slides.autoplayDisableOnInteraction = this.sliderOptions.autoplayDisableOnInteraction;
+      this.slides.loop = this.sliderOptions.loop;
+      this.slides.speed = this.sliderOptions.speed;
+      this.slides.effect = this.sliderOptions.fade;
+      //this.slides.loop = true;
+      //this.slides.loop = true;
+   }
 }

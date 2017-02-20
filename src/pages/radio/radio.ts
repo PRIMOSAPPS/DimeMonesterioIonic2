@@ -13,11 +13,11 @@ import {Config} from '../../config/config';
 })
 export class RadioPage {
   myOptions = {
-    //effect: 'fade',
-    autoplay: 500,
+    effect: 'fade',
+    autoplay: 4000,
     autoplayDisableOnInteraction: false,
     loop: true,
-    speed: 500,
+    speed: 1000,
     //pager: true
   };
 
