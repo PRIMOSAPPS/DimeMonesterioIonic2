@@ -44,7 +44,7 @@ export class MiSlider {
       this.slides.autoplayDisableOnInteraction = this.sliderOptions.autoplayDisableOnInteraction;
       this.slides.loop = this.sliderOptions.loop;
       this.slides.speed = this.sliderOptions.speed;
-      this.slides.effect = this.sliderOptions.fade;
+      this.slides.effect = this.sliderOptions.effect;
       //this.slides.loop = true;
       //this.slides.loop = true;
    }
