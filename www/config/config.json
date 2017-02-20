@@ -1,10 +1,11 @@
 {
   "idPoblacion":1,
   "nombreAplicacion": "DimeMonesterio",
-  "servidor": "http://jamondemonesterio.org",
-  "__servidor": "http://192.168.1.104",
+  "__servidor": "http://jamondemonesterio.org",
+  "servidor": "http://192.168.1.104",
   "rutaNotificacionesApp": "/dime/app/NotificacionesToApp.php",
   "rutaNotificacionesActualizablesApp": "/dime/app/NotificacionesDescargablesToApp.php",
+  "rutaNotificacionesActivasApp": "/dime/app/NotificacionesActivasToApp.php",
   "correoAplicacion": "primosapps@roymainformatica.com",
   "urlRadio": "http://emisoras.dip-badajoz.es:8040/;",
   "latitudPueblo": 38.0891002,

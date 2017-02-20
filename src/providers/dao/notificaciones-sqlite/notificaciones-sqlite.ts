@@ -51,6 +51,14 @@ export class NotificacionesSqLite extends AbstractDao<Notificacion> {
   public allColumns(): string {return NotificacionesSqLite.ALL_COLUMNS;}
   public addQuery(): string {return NotificacionesSqLite.ADD;}
   public getAllQuery(): string {return NotificacionesSqLite.GET_ALL;}
+  public getByIdQuery(id: Number): string {
+    return "SELECT " + NotificacionesSqLite.ALL_COLUMNS + " from " + NotificacionesSqLite.TABLE_NAME
+    + " WHERE id = " + id;
+  }
+  public getByIdsQuery(ids: Array<Number>): string {
+    return "SELECT " + NotificacionesSqLite.ALL_COLUMNS + " from " + NotificacionesSqLite.TABLE_NAME
+    + " WHERE id in (" + ids.join() + ")";
+  }
 
   fromBD(fila: any): Notificacion {
     var resul = new Notificacion();
@@ -81,6 +89,58 @@ export class NotificacionesSqLite extends AbstractDao<Notificacion> {
         }
       );
     });
+    return resul;
+  }
+
+  getByIds(ids: Array<Number>): Promise<any> {
+    var items = new Array();
+    var resul = new Promise((resolve, reject) => {
+      this.abrir().then(() => {
+        var query = this.getByIdsQuery(ids);
+        this.executeSql(query, []).then(
+          (data) => {
+            console.log("Sentencia ejecutada: " + query);
+            for(var i=0; i<data.rows.length; i++) {
+              var item = this.fromBD(data.rows.item(0));
+              items.push(item);
+            }
+            this.cerrar().then(() => {resolve(items);});
+          }, (error) => {
+            console.error("Unable to execute sql: " + query, error);
+            this.cerrar().then(() => {resolve(items);});
+          }
+        );
+      }, (error) => {
+        console.error("[AbstractDao.cargarTodas] Error al abrir la base de datos abierta: " + error);
+        this.cerrar().then(() => {reject(items);});
+      });
+    });
+
+    return resul;
+  }
+
+  getById(id: Number): Promise<any> {
+    var item = null;
+    var resul = new Promise((resolve, reject) => {
+      this.abrir().then(() => {
+        this.executeSql(this.getByIdQuery(id), []).then(
+          (data) => {
+            console.log("Sentencia ejecutada: ");
+            if(data.rows.length > 0) {
+              item = this.fromBD(data.rows.item(0));
+            }
+            this.cerrar().then(() => {resolve(item);});
+          }, (error) => {
+            console.error("Unable to execute sql: " + this.getByIdQuery(id), error);
+            this.cerrar().then(() => {resolve(item);});
+          }
+        );
+      }, (error) => {
+        console.error("[AbstractDao.cargarTodas] Error al abrir la base de datos abierta: " + error);
+        this.cerrar().then(() => {reject(item);});
+      });
+    });
+
     return resul;
   }
 

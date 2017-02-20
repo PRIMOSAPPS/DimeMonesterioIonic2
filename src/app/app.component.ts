@@ -96,6 +96,8 @@ export class MyApp {
               if (res != "false") {
                 console.log("Si que es el primer arranque: " + res);
                 this.accionesPrimerArranque();
+              } else {
+                this.accionesSegundosArranques();
               }
             },
             (err) => { console.log("ERROR LEYENDO LOCALSTORAGE: " + MyApp.PRIMER_ARRANQUE); })
@@ -285,9 +287,18 @@ export class MyApp {
 
   }
 
+  accionesSegundosArranques() {
+    console.log("Base de datos de NOTIFICACIONES creada correctamente.");
+    var notifiSqlite = new NotificacionesSqLite(this.platform);
+    var lectorNotificaciones = new LectorNotificaciones(this.http, notifiSqlite);
+    lectorNotificaciones.cargarNotificacionesServidor();
+  }
+
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
+
+    //this.accionesSegundosArranques();
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }

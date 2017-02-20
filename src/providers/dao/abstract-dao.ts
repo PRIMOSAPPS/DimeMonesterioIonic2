@@ -86,30 +86,78 @@ export abstract class AbstractDao<T> implements IDao<T> {
     return resul;
   }
 
+  add(obj: T): Promise<any> {
+    console.log(" ----------------------------- ");
+    console.log(" ----------------------------- ");
+    console.log(" ----------------------------- ");
+    var resul = new Promise((resolve, reject) => {
+      this.abrir().then(() => {
+        var parametros = this.toBdAdd(obj);
+        this.executeSql(this.addQuery(), parametros).then((ok) => {
+            this.cerrar().then(() => {
+              console.log("Se cierra correctamente la base de datos tras ejecutar la sentencia en add(): " + this.tableName());
+              resolve(true);
+            },
+            (error) => {
+              console.error("Se ha producido un error al cerrar la base de datos: " + this.tableName())
+              reject(error);
+            });
+        },
+        (error) => {
+          console.error("Se ha producido un error al ejecutar la sentencia en la base de datos: " + this.tableName())
+          this.cerrar().then(() => {
+            console.log("Se cierra correctamente la base de datos tras ERROR al ejecutar la sentencia en add(): " + this.tableName());
+            resolve(false);
+          },
+          (error) => {
+            console.error("Se ha producido un error al cerrar la base de datos: " + this.tableName())
+            reject(error);
+          });
+        });
+      }, (error) => {
+        console.error("No se ha podido abrir la abse de datos: " + error);
+        reject(error);
+      });
+    });
+    return resul;
+  }
 
-
-
+/*
   add(obj: T): Promise<any> {
     var resul = new Promise((resolve, reject) => {
       this.abrir().then(() => {
         var parametros = this.toBdAdd(obj);
         this.executeSql(this.addQuery(), parametros).
-        then((ok) => {
-            this.cerrar().then(() => resolve(true));
+          then((ok) => {
+            this.cerrar().then(() => {
+                console.log("Se cierra correctamente la base de datos tras error en add(): " + this.tableName());
+                resolve(true);
+            },
+              (error) => console.error("Se ha producido un error al cerrar la base de datos: " + this.tableName())
+            );
           },
           (error) => {
+            this.cerrar().then(() => {
+              console.log("Se cierra correctamente la base de datos tras error en add(): " + this.tableName());
+              resolve(false);
+            },
+              (error) => console.error("Se ha producido un error al cerrar la base de datos: " + this.tableName())
+            );
+          }, (error) => {
+            console.error("Error en la ejecucion de la sentencia add: " + error);
             this.cerrar().then(() => resolve(false));
           });
-
+//      }, (error) => {
+//        console.error("No se ha podido abrir la abse de datos: " + error);
+//        reject();
       }, (error) => {
-        console.error("Unable to open database", error);
-        this.cerrar().then(() => resolve(false));
+        console.error("No se ha podido abrir la abse de datos: " + error);
+        reject(error);
       });
-
     });
     return resul;
   }
-
+  */
 
   protected abrir(): Promise<any> {
     return this.db.openDatabase({

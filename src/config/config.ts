@@ -8,6 +8,7 @@ export class Config {
 
   private static urlNotificacionesDescarghables: string;
   private static urlNotificaciones: string;
+  private static urlNotificacionesActivas: string;
 
   private constructor() {}
 
@@ -17,6 +18,7 @@ export class Config {
       Config.conf = res.json();
 
       Config.urlNotificacionesDescarghables = Config.SERVIDOR + Config.conf.rutaNotificacionesActualizablesApp;
+      Config.urlNotificacionesActivas = Config.SERVIDOR + Config.conf.rutaNotificacionesActivasApp;
       Config.urlNotificaciones = Config.SERVIDOR + Config.conf.rutaNotificacionesApp;
 
       console.log("[Config] Cargada la configuracion.");
@@ -33,6 +35,8 @@ export class Config {
   public static get SERVIDOR(): string {return Config.conf.servidor};
 
   public static get URL_NOTIFICACIOPNES_DESCARGABLES(): string {return Config.urlNotificacionesDescarghables};
+
+  public static get URL_NOTIFICACIONES_ACTIVAS(): string {return Config.urlNotificacionesActivas};
 
   public static get URL_NOTIFICACION(): string {return Config.urlNotificaciones};
 
